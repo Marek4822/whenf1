@@ -2,7 +2,7 @@ import React from 'react';
 
 const NextEvent = ({ nextEvent, timeLeft }) => {
   return (
-    <div className="event-container">
+    <div className="card">
       <h2>Next Event</h2>
       <p>{nextEvent.type}</p>
       <p>Grand Prix: {nextEvent.grandPrix}</p>
