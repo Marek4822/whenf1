@@ -10,12 +10,10 @@ const GrandPrixButton = () => {
 
   const handleMoreDetailsClick = (grandPrix) => {
     setSelectedGrandPrix(grandPrix);
-    setShowDetails(true); // Ensure details are shown
   };
 
   const handleGoBack = () => {
-    setSelectedGrandPrix(null);
-    setShowDetails(false); // Reset showDetails when going back
+    setSelectedGrandPrix(null); // Only reset the selected Grand Prix
   };
 
   const handleHideAllDetails = () => {
@@ -30,35 +28,35 @@ const GrandPrixButton = () => {
         {showDetails ? 'Hide All Grand Prix Details' : 'Show All Grand Prix Details'}
       </button>
 
-      {showDetails && !selectedGrandPrix && (
+      {showDetails && (
         <div className="details-container">
-          {F1_DATA.GrandsPrix.length > 0 ? (
-            F1_DATA.GrandsPrix.map((grandPrix, index) => (
-              <div key={index} className="grand-prix-container">
-                <h3>{grandPrix.name}</h3>
-                {grandPrix.events.map((event, eventIndex) => (
-                  <div key={eventIndex} className="event-container">
-                    <p>
-                      {event.type}: {event.date} at {event.time}
-                    </p>
-                  </div>
-                ))}
-                <button
-                  onClick={() => handleMoreDetailsClick(grandPrix)}
-                  className="more-details-button"
-                >
-                  MORE Details
-                </button>
-              </div>
-            ))
+          {!selectedGrandPrix ? (
+            F1_DATA.GrandsPrix.length > 0 ? (
+              F1_DATA.GrandsPrix.map((grandPrix, index) => (
+                <div key={index} className="grand-prix-container">
+                  <h3>{grandPrix.name}</h3>
+                  {grandPrix.events.map((event, eventIndex) => (
+                    <div key={eventIndex} className="event-container">
+                      <p>
+                        {event.type}: {event.date} at {event.time}
+                      </p>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => handleMoreDetailsClick(grandPrix)}
+                    className="more-details-button"
+                  >
+                    MORE Details
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p>No Grand Prix events found.</p>
+            )
           ) : (
-            <p>No Grand Prix events found.</p>
+            <GrandPrixDetails grandPrix={selectedGrandPrix} onGoBack={handleGoBack} />
           )}
         </div>
-      )}
-
-      {selectedGrandPrix && (
-        <GrandPrixDetails grandPrix={selectedGrandPrix} onGoBack={handleGoBack} />
       )}
     </div>
   );

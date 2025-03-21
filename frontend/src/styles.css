@@ -84,8 +84,6 @@ h3 {
   margin-bottom: 5px;
 }
 
-/* Add these styles to your existing styles.css */
-/* Add these styles to your existing styles.css */
 .details-container {
   margin-top: 20px;
   width: 90%;
@@ -153,6 +151,54 @@ th {
   color: #fff;
 }
 
+@media only screen and (max-width: 428px) {
+  table {
+    font-size: 12px; 
+  }
+
+  th,
+  td {
+    padding: 8px; 
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    border: 1px solid #444;
+    margin-bottom: 10px;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #444;
+    position: relative;
+    padding-left: 50%; 
+    text-align: right; 
+  }
+
+  td:before {
+    padding-right: 10px;
+    white-space: nowrap;
+    content: attr(data-label); 
+    text-align: left; 
+    font-weight: bold; 
+  }
+}
+
+
 .go-back-button {
   background-color: #ff4757;
   color: #fff;
@@ -165,8 +211,7 @@ th {
 .go-back-button:hover {
   background-color: #e84141;
 }
-/* Add these styles to your existing styles.css */
-/* Add these styles to your existing styles.css */
+
 .details-container {
   margin-top: 20px;
   width: 90%;
@@ -268,13 +313,12 @@ th {
   text-align: center;
 }
 
-/* Add these styles to your existing styles.css */
 .past-event {
-  opacity: 0.7; /* Make past events slightly transparent */
+  opacity: 0.7; 
 }
 
 .future-event {
-  font-weight: bold; /* Make future events bold */
+  font-weight: bold;
 }
 
 .no-data-message {
@@ -283,3 +327,4 @@ th {
   font-size: 14px;
   text-align: center;
 }
+

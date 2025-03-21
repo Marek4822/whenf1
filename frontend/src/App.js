@@ -9,8 +9,10 @@ import './styles.css';
 const App = () => {
   const [nextRace, setNextRace] = useState(null);
   const [nextEvent, setNextEvent] = useState(null);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [raceTimeLeft, setRaceTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [eventTimeLeft, setEventTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  // Find the next race and next event
   useEffect(() => {
     const today = new Date();
     let closestRace = null;
@@ -41,32 +43,58 @@ const App = () => {
 
     setNextRace(closestRace);
     setNextEvent(closestEvent);
-
-    // Start the countdown timer
-    const timer = setInterval(() => {
-      const now = new Date();
-      const raceDate = new Date(`${closestRace.date} ${now.getFullYear()} ${closestRace.time}`);
-      const raceDiff = raceDate - now;
-
-      const raceTimeLeft = {
-        days: Math.floor(raceDiff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((raceDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((raceDiff % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((raceDiff % (1000 * 60)) / 1000),
-      };
-
-      setTimeLeft(raceTimeLeft);
-    }, 1000);
-
-    return () => clearInterval(timer); // Cleanup timer on unmount
   }, []);
+
+  // Update the countdown timer for the next race
+  useEffect(() => {
+    if (nextRace) {
+      const timer = setInterval(() => {
+        const now = new Date();
+        const raceDate = new Date(`${nextRace.date} ${now.getFullYear()} ${nextRace.time}`);
+        const diff = raceDate - now;
+
+        setRaceTimeLeft({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((diff % (1000 * 60)) / 1000),
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // Cleanup timer on unmount
+    }
+  }, [nextRace]);
+
+  // Update the countdown timer for the next event
+  useEffect(() => {
+    if (nextEvent) {
+      const timer = setInterval(() => {
+        const now = new Date();
+        const eventDate = new Date(`${nextEvent.date} ${now.getFullYear()} ${nextEvent.time}`);
+        const diff = eventDate - now;
+
+        setEventTimeLeft({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((diff % (1000 * 60)) / 1000),
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // Cleanup timer on unmount
+    }
+  }, [nextEvent]);
 
   return (
     <div className="app">
       <Header />
-      <NextRace nextRace={nextRace} timeLeft={timeLeft} />
-      <NextEvent nextEvent={nextEvent} />
-      <GrandPrixButton data={F1_DATA} />
+      {nextRace && (
+        <NextRace nextRace={nextRace} timeLeft={raceTimeLeft} />
+      )}
+      {nextEvent && nextEvent.type !== "Grand Prix" && (
+        <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
+      )}
+      <GrandPrixButton />
     </div>
   );
 };

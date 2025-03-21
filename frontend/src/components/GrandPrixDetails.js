@@ -61,13 +61,13 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
                   <tbody>
                     {driverResults.map((result, idx) => (
                       <tr key={idx}>
-                        <td>{result.pos}</td>
-                        <td>{result.no}</td>
-                        <td>{result.driver}</td>
-                        <td>{result.car}</td>
-                        <td>{result.time}</td>
-                        <td>{result.gap}</td>
-                        <td>{result.laps}</td>
+                        <td data-label="Pos">{result.pos}</td>
+                        <td data-label="No">{result.no}</td>
+                        <td data-label="Driver">{result.driver}</td>
+                        <td data-label="Car">{result.car}</td>
+                        <td data-label="Time">{result.time}</td>
+                        <td data-label="Gap">{result.gap}</td>
+                        <td data-label="Laps">{result.laps}</td>
                       </tr>
                     ))}
                   </tbody>
