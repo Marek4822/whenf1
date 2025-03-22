@@ -4,7 +4,7 @@ import sqlite3
 
 app = Flask(__name__)
 CORS(app)  
-DATABASE_NAME = "f1_data.db"
+DATABASE_NAME = "../f1_data.db"
 
 @app.route("/api/sessions", methods=["GET"])
 def get_sessions():

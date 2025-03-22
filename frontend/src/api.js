@@ -1,5 +1,4 @@
-// src/api.js
-const API_BASE_URL = "http://localhost:5000"; // Replace with your Flask backend URL
+const API_BASE_URL = "http://localhost:5000"; 
 
 const fetchWithTimeout = async (url, options = {}, timeout = 5000) => {
   const controller = new AbortController();
@@ -7,7 +6,7 @@ const fetchWithTimeout = async (url, options = {}, timeout = 5000) => {
 
   try {
     const response = await fetch(url, { ...options, signal: controller.signal });
-    clearTimeout(id); // Clear the timeout if the request completes
+    clearTimeout(id); 
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }

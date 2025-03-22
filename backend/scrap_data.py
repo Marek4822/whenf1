@@ -1,7 +1,8 @@
 import sqlite3
 import requests
 from bs4 import BeautifulSoup
-from gp_data import *
+from data.gp_data import *
+from data.gp_mapping import *
 
 DATABASE_NAME = "f1_data.db"
 
@@ -49,11 +50,20 @@ def scrape_session_data(url):
 def save_to_database(grand_prix_name, session_type, data):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
+    
+    # Delete existing records for the same grand_prix_name and session_type
+    cursor.execute("""
+        DELETE FROM sessions
+        WHERE grand_prix_name = ? AND session_type = ?
+    """, (grand_prix_name, session_type))
+    
+    # Insert new data
     for entry in data:
         cursor.execute("""
             INSERT INTO sessions (grand_prix_name, session_type, pos, no, driver, car, time, gap, laps)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (grand_prix_name, session_type, *entry))
+    
     conn.commit()
     conn.close()
 
@@ -62,10 +72,13 @@ def automate_scraping():
     for gp in grands_prix:
         gp_name = gp["name"]
         gp_id = gp["id"]
+        # Get the URL-friendly name from the mapping
+        url_friendly_name = GRAND_PRIX_URL_MAPPING.get(gp_name, gp_name.replace(' ', '-').lower())
+        
         for event in gp["events"]:
             session_type = event["type"]
             url_suffix = event["url_suffix"]
-            url = f"https://www.formula1.com/en/results/2025/races/{gp_id}/{gp_name.replace(' ', '-').lower()}/{url_suffix}"
+            url = f"https://www.formula1.com/en/results/2025/races/{gp_id}/{url_friendly_name}/{url_suffix}"
             print(f"Scraping data from: {url}")
             data = scrape_session_data(url)
             if data:
