@@ -51,13 +51,11 @@ def save_to_database(grand_prix_name, session_type, data):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     
-    # Delete existing records for the same grand_prix_name and session_type
     cursor.execute("""
         DELETE FROM sessions
         WHERE grand_prix_name = ? AND session_type = ?
     """, (grand_prix_name, session_type))
     
-    # Insert new data
     for entry in data:
         cursor.execute("""
             INSERT INTO sessions (grand_prix_name, session_type, pos, no, driver, car, time, gap, laps)
@@ -72,7 +70,6 @@ def automate_scraping():
     for gp in grands_prix:
         gp_name = gp["name"]
         gp_id = gp["id"]
-        # Get the URL-friendly name from the mapping
         url_friendly_name = GRAND_PRIX_URL_MAPPING.get(gp_name, gp_name.replace(' ', '-').lower())
         
         for event in gp["events"]:

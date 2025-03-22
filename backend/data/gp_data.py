@@ -60,7 +60,7 @@ grands_prix = [
         "events": [
             {"type": "Free Practice 1", "url_suffix": "practice/1"},
             {"type": "Sprint Qualifying", "url_suffix": "sprint-qualifying"},
-            {"type": "Sprint", "url_suffix": "sprint"},
+            {"type": "Sprint", "url_suffix": "sprint-results"},
             {"type": "Qualifying", "url_suffix": "qualifying"},
             {"type": "Grand Prix", "url_suffix": "race-result"},
         ],
@@ -137,7 +137,7 @@ grands_prix = [
         "events": [
             {"type": "Free Practice 1", "url_suffix": "practice/1"},
             {"type": "Sprint Qualifying", "url_suffix": "sprint-qualifying"},
-            {"type": "Sprint", "url_suffix": "sprint"},
+            {"type": "Sprint", "url_suffix": "sprint-results"},
             {"type": "Qualifying", "url_suffix": "qualifying"},
             {"type": "Grand Prix", "url_suffix": "race-result"},
         ],
@@ -203,7 +203,7 @@ grands_prix = [
         "events": [
             {"type": "Free Practice 1", "url_suffix": "practice/1"},
             {"type": "Sprint Qualifying", "url_suffix": "sprint-qualifying"},
-            {"type": "Sprint", "url_suffix": "sprint"},
+            {"type": "Sprint", "url_suffix": "sprint-results"},
             {"type": "Qualifying", "url_suffix": "qualifying"},
             {"type": "Grand Prix", "url_suffix": "race-result"},
         ],
@@ -225,7 +225,7 @@ grands_prix = [
         "events": [
             {"type": "Free Practice 1", "url_suffix": "practice/1"},
             {"type": "Sprint Qualifying", "url_suffix": "sprint-qualifying"},
-            {"type": "Sprint", "url_suffix": "sprint"},
+            {"type": "Sprint", "url_suffix": "sprint-results"},
             {"type": "Qualifying", "url_suffix": "qualifying"},
             {"type": "Grand Prix", "url_suffix": "race-result"},
         ],

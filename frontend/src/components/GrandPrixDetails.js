@@ -9,10 +9,8 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
 
   const handleSessionClick = async (sessionType) => {
     if (expandedSession === sessionType) {
-      // Collapse if the same session is clicked again
       setExpandedSession(null);
     } else {
-      // Expand the clicked session
       setExpandedSession(sessionType);
       setLoading(true);
       setError(null);
@@ -21,12 +19,15 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
         const results = await fetchDriverResults(grandPrix.name, sessionType);
         setDriverResults(results);
       } catch (err) {
-        setError(err.message); // Display error message
+        setError(err.message); 
       } finally {
         setLoading(false);
       }
     }
   };
+
+  const isQualificationSession = expandedSession === 'Qualifying';
+  const isSprintQualificationSession = expandedSession === 'Sprint Qualifying';
 
   return (
     <div className="grand-prix-details">
@@ -53,9 +54,19 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
                       <th>No</th>
                       <th>Driver</th>
                       <th>Car</th>
-                      <th>Time</th>
-                      <th>Gap</th>
-                      <th>Laps</th>
+                      {isQualificationSession || isSprintQualificationSession ? (
+                        <>
+                          <th>Q1</th>
+                          <th>Q2</th>
+                          <th>Q3</th>
+                        </>
+                      ) : (
+                        <>
+                          <th>Time</th>
+                          <th>Gap</th>
+                          <th>Laps</th>
+                        </>
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -65,9 +76,19 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
                         <td data-label="No">{result.no}</td>
                         <td data-label="Driver">{result.driver}</td>
                         <td data-label="Car">{result.car}</td>
-                        <td data-label="Time">{result.time}</td>
-                        <td data-label="Gap">{result.gap}</td>
-                        <td data-label="Laps">{result.laps}</td>
+                        {isQualificationSession || isSprintQualificationSession ? (
+                          <>
+                            <td data-label="Q1">{result.time}</td>
+                            <td data-label="Q2">{result.gap}</td>
+                            <td data-label="Q3">{result.laps}</td>
+                          </>
+                        ) : (
+                          <>
+                            <td data-label="Time">{result.time}</td>
+                            <td data-label="Gap">{result.gap}</td>
+                            <td data-label="Laps">{result.laps}</td>
+                          </>
+                        )}
                       </tr>
                     ))}
                   </tbody>
