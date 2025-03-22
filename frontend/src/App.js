@@ -4,6 +4,7 @@ import NextRace from './components/NextRace';
 import NextEvent from './components/NextEvent';
 import GrandPrixButton from './components/GrandPrixButton';
 import F1_DATA from './data/f1Data';
+import ScrollButtons from './components/ScrollButtons';
 import './styles.css';
 
 const App = () => {
@@ -95,6 +96,10 @@ const App = () => {
         <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
       )}
       <GrandPrixButton />
+
+
+
+      <ScrollButtons />
     </div>
   );
 };
