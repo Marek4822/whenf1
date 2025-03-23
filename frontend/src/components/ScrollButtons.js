@@ -34,7 +34,7 @@ const ScrollButtons = () => {
       // Set a new timeout to hide the buttons after 2 seconds of inactivity
       const timeout = setTimeout(() => {
         setShowButtons(false);
-      }, 2000);
+      }, 3000);
 
       setScrollTimeout(timeout);
     } else {

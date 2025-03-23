@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import NextRace from './components/NextRace';
 import NextEvent from './components/NextEvent';
+import DriverStandings from './components/DriverStandings';
+import TeamStandings from './components/TeamStandings';
 import GrandPrixButton from './components/GrandPrixButton';
-import F1_DATA from './data/f1Data';
 import ScrollButtons from './components/ScrollButtons';
+import F1_DATA from './data/f1Data';
 import './styles.css';
 
 const App = () => {
@@ -12,6 +14,7 @@ const App = () => {
   const [nextEvent, setNextEvent] = useState(null);
   const [raceTimeLeft, setRaceTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [eventTimeLeft, setEventTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [activeComponent, setActiveComponent] = useState(null); 
 
   // Find the next race and next event
   useEffect(() => {
@@ -95,10 +98,21 @@ const App = () => {
       {nextEvent && nextEvent.type !== "Grand Prix" && (
         <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
       )}
-      <GrandPrixButton />
 
-
-
+      <div className="controls-container">
+        <DriverStandings
+          isActive={activeComponent === 'driver'}
+          setActive={() => setActiveComponent(prev => prev === 'driver' ? null : 'driver')}
+        />
+        <TeamStandings
+          isActive={activeComponent === 'team'}
+          setActive={() => setActiveComponent(prev => prev === 'team' ? null : 'team')}
+        />
+        <GrandPrixButton
+          isActive={activeComponent === 'grandPrix'}
+          setActive={() => setActiveComponent(prev => prev === 'grandPrix' ? null : 'grandPrix')}
+        />
+      </div>
       <ScrollButtons />
     </div>
   );

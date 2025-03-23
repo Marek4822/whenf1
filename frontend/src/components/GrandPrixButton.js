@@ -2,33 +2,29 @@ import React, { useState } from 'react';
 import GrandPrixDetails from './GrandPrixDetails';
 import F1_DATA from '../data/f1Data';
 
-const GrandPrixButton = () => {
-  const [showDetails, setShowDetails] = useState(false);
+const GrandPrixButton = ({ isActive, setActive }) => {
   const [selectedGrandPrix, setSelectedGrandPrix] = useState(null);
-
-  console.log("F1_DATA:", F1_DATA); // Debugging
 
   const handleMoreDetailsClick = (grandPrix) => {
     setSelectedGrandPrix(grandPrix);
   };
 
   const handleGoBack = () => {
-    setSelectedGrandPrix(null); // Only reset the selected Grand Prix
+    setSelectedGrandPrix(null);
   };
 
   const handleHideAllDetails = () => {
-    console.log("Toggling showDetails:", !showDetails); // Debugging
-    setShowDetails(!showDetails);
-    setSelectedGrandPrix(null); // Reset selected Grand Prix
+    setActive(); // Use the prop to toggle visibility
+    setSelectedGrandPrix(null);
   };
 
   return (
     <div className="grand-prix-button">
       <button onClick={handleHideAllDetails}>
-        {showDetails ? 'Hide All Grand Prix Details' : 'Show All Grand Prix Details'}
+        {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
       </button>
 
-      {showDetails && (
+      {isActive && (
         <div className="details-container">
           {!selectedGrandPrix ? (
             F1_DATA.GrandsPrix.length > 0 ? (

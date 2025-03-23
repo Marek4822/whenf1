@@ -133,58 +133,7 @@ th {
   color: #fff;
 }
 
-@media only screen and (max-width: 428px) {
-  table {
-    font-size: 12px; 
-  }
-
-  th,
-  td {
-    padding: 8px; 
-  }
-
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
-    display: block;
-  }
-
-  thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
-  tr {
-    border: 1px solid #444;
-    margin-bottom: 10px;
-  }
-
-  td {
-    border: none;
-    border-bottom: 1px solid #444;
-    position: relative;
-    padding-left: 20%; 
-  }
-
-  td:before {
-    position: absolute;
-    top: 50%; 
-    left: 6px; 
-    transform: translateY(-50%); 
-    width: 45%; 
-    padding-right: 10px;
-    white-space: nowrap;
-    content: attr(data-label); 
-    text-align: left; 
-    font-weight: bold;
-  }
-}
-
-/* SCROLLLLLLLLLLLLLLLLLLLLL */
+/* Scroll buttoms */
 
 .scroll-buttons {
   position: fixed;
@@ -225,4 +174,55 @@ th {
 
 .top-button {
   margin-bottom: 10px;
+}
+
+@media only screen and (max-width: 428px) {
+  table {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    border: 1px solid #444;
+    margin-bottom: 10px;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #444;
+    position: relative;
+    padding-left: 20%;
+  }
+
+  td:before {
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    transform: translateY(-50%);
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    content: attr(data-label);
+    text-align: left;
+    font-weight: bold;
+  }
 }

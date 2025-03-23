@@ -47,5 +47,45 @@ def get_sessions_by_grand_prix(grand_prix_name):
     ]
     return jsonify(session_data)
 
+
+@app.route("/api/driver_standings", methods=["GET"])
+def get_driver_standings():
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM driver_standings")
+    standings = cursor.fetchall()
+    conn.close()
+
+    # Map columns explicitly (adjust indices to match your table structure)
+    standings_data = [
+        {
+            "position": row[1],  # Assuming position is the second column
+            "driver": row[2],    # driver name
+            "nationality": row[3],
+            "team": row[4],
+            "points": row[5]
+        }
+        for row in standings
+    ]
+    return jsonify(standings_data)
+
+@app.route("/api/team_standings", methods=["GET"])
+def get_team_standings():
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM team_standings")
+    standings = cursor.fetchall()
+    conn.close()
+
+    standings_data = [
+        {
+            "position": row[1],  # position column
+            "team": row[2],      # team name column
+            "points": row[3]     # points column
+        }
+        for row in standings
+    ]
+    return jsonify(standings_data)
+
 if __name__ == "__main__":
     app.run(debug=True)
