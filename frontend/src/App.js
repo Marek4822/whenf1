@@ -6,7 +6,7 @@ import DriverStandings from './components/DriverStandings';
 import TeamStandings from './components/TeamStandings';
 import GrandPrixButton from './components/GrandPrixButton';
 import ScrollButtons from './components/ScrollButtons';
-import F1_DATA from './data/f1Data';
+import { fetchGrandsPrix } from './api/api';
 import './styles.css';
 
 const App = () => {
@@ -14,80 +14,103 @@ const App = () => {
   const [nextEvent, setNextEvent] = useState(null);
   const [raceTimeLeft, setRaceTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [eventTimeLeft, setEventTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [activeComponent, setActiveComponent] = useState(null); 
+  const [activeComponent, setActiveComponent] = useState(null);
+  const [grandsPrixData, setGrandsPrixData] = useState({ GrandsPrix: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Find the next race and next event
+  // Fetch data from backend
   useEffect(() => {
-    const today = new Date();
+    const loadData = async () => {
+      try {
+        const response = await fetchGrandsPrix();
+        setGrandsPrixData(response);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  // Find next race and event
+  useEffect(() => {
+    if (!grandsPrixData.GrandsPrix.length) return;
+
+    const now = new Date();
     let closestRace = null;
     let closestEvent = null;
     let closestRaceDiff = Infinity;
     let closestEventDiff = Infinity;
 
-    F1_DATA.GrandsPrix.forEach((grandPrix) => {
-      grandPrix.events.forEach((event) => {
-        const eventDate = new Date(`${event.date} ${today.getFullYear()} ${event.time}`);
-        const diff = eventDate - today;
+    grandsPrixData.GrandsPrix.forEach(gp => {
+      gp.events.forEach(event => {
+        const eventDate = new Date(event.datetime);
+        const diff = eventDate - now;
 
-        if (diff > 0) {
-          // Find the next race
-          if (event.type === "Grand Prix" && diff < closestRaceDiff) {
-            closestRaceDiff = diff;
-            closestRace = { ...event, grandPrix: grandPrix.name };
-          }
+        if (diff > 0 && diff < closestEventDiff) {
+          closestEventDiff = diff;
+          closestEvent = { ...event, grandPrix: gp.name, datetime: eventDate };
+        }
 
-          // Find the next event (any type)
-          if (diff < closestEventDiff) {
-            closestEventDiff = diff;
-            closestEvent = { ...event, grandPrix: grandPrix.name };
-          }
+        if (event.type === 'Grand Prix' && diff > 0 && diff < closestRaceDiff) {
+          closestRaceDiff = diff;
+          closestRace = { ...event, grandPrix: gp.name, datetime: eventDate };
         }
       });
     });
 
-    setNextRace(closestRace);
     setNextEvent(closestEvent);
-  }, []);
+    setNextRace(closestRace);
+  }, [grandsPrixData]);
 
-  // Update the countdown timer for the next race
+  // Update race countdown
   useEffect(() => {
-    if (nextRace) {
-      const timer = setInterval(() => {
-        const now = new Date();
-        const raceDate = new Date(`${nextRace.date} ${now.getFullYear()} ${nextRace.time}`);
-        const diff = raceDate - now;
+    if (!nextRace) return;
 
-        setRaceTimeLeft({
-          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((diff % (1000 * 60)) / 1000),
-        });
-      }, 1000);
+    const timer = setInterval(() => {
+      const now = new Date();
+      const diff = nextRace.datetime - now;
 
-      return () => clearInterval(timer); // Cleanup timer on unmount
-    }
+      setRaceTimeLeft({
+        days: Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24))),
+        hours: Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))),
+        minutes: Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))),
+        seconds: Math.max(0, Math.floor((diff % (1000 * 60)) / 1000)),
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, [nextRace]);
 
-  // Update the countdown timer for the next event
+  // Update event countdown
   useEffect(() => {
-    if (nextEvent) {
-      const timer = setInterval(() => {
-        const now = new Date();
-        const eventDate = new Date(`${nextEvent.date} ${now.getFullYear()} ${nextEvent.time}`);
-        const diff = eventDate - now;
+    if (!nextEvent) return;
 
-        setEventTimeLeft({
-          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((diff % (1000 * 60)) / 1000),
-        });
-      }, 1000);
+    const timer = setInterval(() => {
+      const now = new Date();
+      const diff = nextEvent.datetime - now;
 
-      return () => clearInterval(timer); // Cleanup timer on unmount
-    }
+      setEventTimeLeft({
+        days: Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24))),
+        hours: Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))),
+        minutes: Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))),
+        seconds: Math.max(0, Math.floor((diff % (1000 * 60)) / 1000)),
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, [nextEvent]);
+
+  if (loading) {
+    return <div className="loading">Loading F1 data...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
 
   return (
     <div className="app">
@@ -98,7 +121,6 @@ const App = () => {
       {nextEvent && nextEvent.type !== "Grand Prix" && (
         <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
       )}
-
       <div className="controls-container">
         <DriverStandings
           isActive={activeComponent === 'driver'}
@@ -111,6 +133,7 @@ const App = () => {
         <GrandPrixButton
           isActive={activeComponent === 'grandPrix'}
           setActive={() => setActiveComponent(prev => prev === 'grandPrix' ? null : 'grandPrix')}
+          grandsPrixData={grandsPrixData}
         />
       </div>
       <ScrollButtons />

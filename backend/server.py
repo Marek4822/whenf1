@@ -87,5 +87,56 @@ def get_team_standings():
     ]
     return jsonify(standings_data)
 
+@app.route("/api/grands_prix", methods=["GET"])
+def get_grands_prix():
+    try:
+        conn = sqlite3.connect(DATABASE_NAME)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT DISTINCT grand_prix 
+            FROM calendar 
+            ORDER BY datetime(full_datetime)
+        """)
+        grand_prix_names = [row[0] for row in cursor.fetchall()]
+        
+        grands_prix = []
+        for name in grand_prix_names:
+            cursor.execute("""
+                SELECT 
+                    event_type,
+                    event_date,
+                    event_time,
+                    full_datetime 
+                FROM calendar 
+                WHERE grand_prix = ? 
+                ORDER BY datetime(full_datetime)
+            """, (name,))
+            
+            events = []
+            for row in cursor.fetchall():
+                events.append({
+                    "type": row[0],      
+                    "date": row[1],       
+                    "time": row[2],       
+                    "datetime": row[3]    
+                })
+            
+            grands_prix.append({
+                "name": name,
+                "events": events
+            })
+        
+        conn.close()
+        return jsonify({"GrandsPrix": grands_prix})
+    
+    except sqlite3.Error as e:
+        print(f"Database error: {str(e)}")
+        return jsonify({"error": "Database error", "details": str(e)}), 500
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+    
+
 if __name__ == "__main__":
     app.run(debug=True)

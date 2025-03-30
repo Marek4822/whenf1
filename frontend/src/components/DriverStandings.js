@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchWithTimeout, API_BASE_URL } from '../api';
+import { fetchWithTimeout, API_BASE_URL } from '../api/api';
 
 const DriverStandings = ({ isActive, setActive }) => {
   const [standings, setStandings] = useState([]);

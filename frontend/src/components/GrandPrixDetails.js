@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchDriverResults } from '../api';
+import { fetchDriverResults } from '../api/api';
 
 const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
   const [expandedSession, setExpandedSession] = useState(null);
@@ -25,8 +25,9 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
       }
     }
   };
-
-  const isQualificationSession = expandedSession === 'Qualifying';
+  const isRaceSession = expandedSession === 'Grand Prix';
+  const isSprintRace = expandedSession === 'Sprint';
+    const isQualificationSession = expandedSession === 'Qualifying';
   const isSprintQualificationSession = expandedSession === 'Sprint Qualifying';
 
   return (
@@ -48,51 +49,63 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
                 <p className="no-data-message">Error: {error}</p>
               ) : driverResults.length > 0 ? (
                 <table>
-                  <thead>
-                    <tr>
-                      <th>Pos</th>
-                      <th>No</th>
-                      <th>Driver</th>
-                      <th>Car</th>
-                      {isQualificationSession || isSprintQualificationSession ? (
-                        <>
-                          <th>Q1</th>
-                          <th>Q2</th>
-                          <th>Q3</th>
-                        </>
-                      ) : (
-                        <>
-                          <th>Time</th>
-                          <th>Gap</th>
-                          <th>Laps</th>
-                        </>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {driverResults.map((result, idx) => (
-                      <tr key={idx}>
-                        <td data-label="Pos">{result.pos}</td>
-                        <td data-label="No">{result.no}</td>
-                        <td data-label="Driver">{result.driver}</td>
-                        <td data-label="Car">{result.car}</td>
-                        {isQualificationSession || isSprintQualificationSession ? (
-                          <>
-                            <td data-label="Q1">{result.time}</td>
-                            <td data-label="Q2">{result.gap}</td>
-                            <td data-label="Q3">{result.laps}</td>
-                          </>
-                        ) : (
-                          <>
-                            <td data-label="Time">{result.time}</td>
-                            <td data-label="Gap">{result.gap}</td>
-                            <td data-label="Laps">{result.laps}</td>
-                          </>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <thead>
+          <tr>
+            <th>Pos</th>
+            <th>No</th>
+            <th>Driver</th>
+            <th>Car</th>
+            {isQualificationSession || isSprintQualificationSession ? (
+              <>
+                <th>Q1</th>
+                <th>Q2</th>
+                <th>Q3</th>
+              </>
+            ) : (isRaceSession || isSprintRace) ? (
+              <>
+                <th>Laps</th>
+                <th>Gap</th>
+                <th>Points</th>
+              </>
+            ) : (
+              <>
+                <th>Time</th>
+                <th>Gap</th>
+                <th>Laps</th>
+              </>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {driverResults.map((result, idx) => (
+            <tr key={idx}>
+              <td data-label="Pos">{result.pos}</td>
+              <td data-label="No">{result.no}</td>
+              <td data-label="Driver">{result.driver}</td>
+              <td data-label="Car">{result.car}</td>
+              {isQualificationSession || isSprintQualificationSession ? (
+                <>
+                  <td data-label="Q1">{result.time}</td>
+                  <td data-label="Q2">{result.gap}</td>
+                  <td data-label="Q3">{result.laps}</td>
+                </>
+              ) : (isRaceSession || isSprintRace) ? (
+                <>
+                  <td data-label="Laps">{result.time}</td>
+                  <td data-label="Gap">{result.gap}</td>
+                  <td data-label="Points">{result.laps}</td>
+                </>
+              ) : (
+                <>
+                  <td data-label="Time">{result.time}</td>
+                  <td data-label="Gap">{result.gap}</td>
+                  <td data-label="Laps">{result.laps}</td>
+                </>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
               ) : (
                 <p className="no-data-message">No data available for this session.</p>
               )}

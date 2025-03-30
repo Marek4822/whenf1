@@ -1,61 +1,92 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import GrandPrixDetails from './GrandPrixDetails';
-import F1_DATA from '../data/f1Data';
 
-const GrandPrixButton = ({ isActive, setActive }) => {
+const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
   const [selectedGrandPrix, setSelectedGrandPrix] = useState(null);
 
-  const handleMoreDetailsClick = (grandPrix) => {
-    setSelectedGrandPrix(grandPrix);
-  };
-
-  const handleGoBack = () => {
+  // Handle component visibility and state cleanup
+  const toggleDetails = () => {
+    setActive(prev => !prev);
     setSelectedGrandPrix(null);
   };
 
-  const handleHideAllDetails = () => {
-    setActive(); // Use the prop to toggle visibility
-    setSelectedGrandPrix(null);
-  };
+  // Show loading state if data isn't ready
+  if (!grandsPrixData) {
+    return (
+      <div className="grand-prix-button">
+        <button onClick={toggleDetails} className="toggle-button">
+          {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
+        </button>
+        {isActive && <div className="loading">Loading Grand Prix data...</div>}
+      </div>
+    );
+  }
 
   return (
     <div className="grand-prix-button">
-      <button onClick={handleHideAllDetails}>
+      <button onClick={toggleDetails} className="toggle-button">
         {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
       </button>
 
       {isActive && (
-        <div className="details-container">
+        <div className="gp-container">
           {!selectedGrandPrix ? (
-            F1_DATA.GrandsPrix.length > 0 ? (
-              F1_DATA.GrandsPrix.map((grandPrix, index) => (
-                <div key={index} className="grand-prix-container">
-                  <h3>{grandPrix.name}</h3>
-                  {grandPrix.events.map((event, eventIndex) => (
-                    <div key={eventIndex} className="event-container">
-                      <p>
-                        {event.type}: {event.date} at {event.time}
-                      </p>
-                    </div>
-                  ))}
+            grandsPrixData.GrandsPrix?.length > 0 ? (
+              grandsPrixData.GrandsPrix.map((gp) => (
+                <div key={`${gp.name}-${gp.round}`} className="gp-card">
+                  <h3>{gp.name}</h3>
+                  <div className="events-list">
+                    {gp.events?.map((event) => (
+                      <div key={`${gp.name}-${event.type}`} className="event-item">
+                        <span className="event-type">{event.type}</span>
+                        <span className="event-time">
+                          {event.date} at {event.time}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                   <button
-                    onClick={() => handleMoreDetailsClick(grandPrix)}
-                    className="more-details-button"
+                    onClick={() => setSelectedGrandPrix(gp)}
+                    className="details-button"
                   >
-                    MORE Details
+                    More Details →
                   </button>
                 </div>
               ))
             ) : (
-              <p>No Grand Prix events found.</p>
+              <p className="no-data">No Grand Prix data available</p>
             )
           ) : (
-            <GrandPrixDetails grandPrix={selectedGrandPrix} onGoBack={handleGoBack} />
+            <GrandPrixDetails
+              grandPrix={selectedGrandPrix}
+              onGoBack={() => setSelectedGrandPrix(null)}
+            />
           )}
         </div>
       )}
     </div>
   );
+};
+
+GrandPrixButton.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  setActive: PropTypes.func.isRequired,
+  grandsPrixData: PropTypes.shape({
+    GrandsPrix: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        events: PropTypes.arrayOf(
+          PropTypes.shape({
+            type: PropTypes.string.isRequired,
+            date: PropTypes.string.isRequired,
+            time: PropTypes.string.isRequired,
+            datetime: PropTypes.string.isRequired,
+          })
+        ).isRequired,
+      })
+    ).isRequired,
+  }),
 };
 
 export default GrandPrixButton;
