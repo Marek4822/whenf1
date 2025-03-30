@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request  
 from flask_cors import CORS
 import sqlite3
+import subprocess
 
 app = Flask(__name__)
 CORS(app)  
@@ -56,11 +57,10 @@ def get_driver_standings():
     standings = cursor.fetchall()
     conn.close()
 
-    # Map columns explicitly (adjust indices to match your table structure)
     standings_data = [
         {
-            "position": row[1],  # Assuming position is the second column
-            "driver": row[2],    # driver name
+            "position": row[1],
+            "driver": row[2],
             "nationality": row[3],
             "team": row[4],
             "points": row[5]
@@ -79,9 +79,9 @@ def get_team_standings():
 
     standings_data = [
         {
-            "position": row[1],  # position column
-            "team": row[2],      # team name column
-            "points": row[3]     # points column
+            "position": row[1], 
+            "team": row[2],   
+            "points": row[3] 
         }
         for row in standings
     ]

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from data.gp_data import *
 from data.gp_mapping import *
 
-DATABASE_NAME = "f1_data.db"
+DATABASE_NAME = "/home/benek/react-native/whenf1/f1_data.db"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }

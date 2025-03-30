@@ -176,6 +176,37 @@ th {
   margin-bottom: 10px;
 }
 
+
+.refresh-button-container {
+  margin-top: 20px;
+}
+
+.refresh-button-container button {
+  background-color: #28a745; 
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-button-container button:hover {
+  background-color: #218838; 
+}
+
+.refresh-button-container button:disabled {
+  background-color: #6c757d; 
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
 @media only screen and (max-width: 428px) {
   table {
     font-size: 12px;
