@@ -138,5 +138,32 @@ def get_grands_prix():
         return jsonify({"error": "Server error", "details": str(e)}), 500
     
 
+@app.route('/api/refresh-data', methods=['POST'])
+def refresh_data():
+    try:
+        result = subprocess.run(
+            ['python3', 'scrap_data.py'],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return jsonify({
+            "status": "success",
+            "output": result.stdout,
+            "error": result.stderr
+        })
+    except subprocess.CalledProcessError as e:
+        return jsonify({
+            "status": "error",
+            "error": f"Script failed with code {e.returncode}",
+            "output": e.stdout,
+            "error_details": e.stderr
+        }), 500
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "error": str(e)
+        }), 500
+
 if __name__ == "__main__":
     app.run(debug=True)

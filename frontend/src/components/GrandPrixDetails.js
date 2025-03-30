@@ -27,7 +27,7 @@ const GrandPrixDetails = ({ grandPrix, onGoBack }) => {
   };
   const isRaceSession = expandedSession === 'Grand Prix';
   const isSprintRace = expandedSession === 'Sprint';
-    const isQualificationSession = expandedSession === 'Qualifying';
+  const isQualificationSession = expandedSession === 'Qualifying';
   const isSprintQualificationSession = expandedSession === 'Sprint Qualifying';
 
   return (

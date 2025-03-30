@@ -6,6 +6,7 @@ import DriverStandings from './components/DriverStandings';
 import TeamStandings from './components/TeamStandings';
 import GrandPrixButton from './components/GrandPrixButton';
 import ScrollButtons from './components/ScrollButtons';
+import RefreshButton from './components/RefreshButton';
 import { fetchGrandsPrix } from './api/api';
 import './styles.css';
 
@@ -122,6 +123,10 @@ const App = () => {
         <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
       )}
       <div className="controls-container">
+      <RefreshButton onRefresh={() => {
+    // Add logic to refresh your data if needed
+    fetchGrandsPrix().then(setGrandsPrixData);
+  }} />
         <DriverStandings
           isActive={activeComponent === 'driver'}
           setActive={() => setActiveComponent(prev => prev === 'driver' ? null : 'driver')}
