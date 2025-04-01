@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-
 const Timer = ({ timeLeft }) => {
   return (
     <div className="text-blue-600 font-semibold mt-3">
