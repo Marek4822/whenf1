@@ -24,43 +24,71 @@ const DriverStandings = ({ isActive, setActive }) => {
     }
   };
 
+  const renderMobileDriverCard = (standing, index) => (
+    <div key={index} className="border rounded-lg p-3 mb-2 bg-white shadow-sm">
+      <div className="flex justify-between border-b pb-2 mb-2">
+        <span className="font-medium">#{standing.position}</span>
+        <span className="font-medium">{standing.driver}</span>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-sm">
+        <div>
+          <span className="text-gray-500">Team:</span> {standing.team}
+        </div>
+        <div>
+          <span className="text-gray-500">Points:</span> {standing.points}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <>
-      <button onClick={toggleStandings} disabled={loading} className="w-full bg-blue-600 text-white p-3 rounded-xl font-medium hover:bg-blue-700 transition-colors">
+    <div className="mb-4">
+      <button 
+        onClick={toggleStandings} 
+        disabled={loading} 
+        className="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+      >
         {loading ? 'Loading...' : isActive ? 'Hide Driver Standings' : 'Show Driver Standings'}
       </button>
       
       {isActive && (
-        <div className="mt-4">
-          {error && <p className="text-red-500 mb-2">{error}</p>}
+        <div className="mt-3">
+          {error && <p className="text-red-500 mb-2 text-sm">{error}</p>}
           {standings.length > 0 && (
-            <div className="bg-white rounded-xl shadow-md overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-700 text-white">
-                  <tr>
-                    <th className="p-3 text-left">Pos</th>
-                    <th className="p-3 text-left">Name</th>
-                    <th className="p-3 text-left">Team</th>
-                    <th className="p-3 text-left">Points</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-                  {standings.map((standing, index) => (
-                    <tr key={index}>
-                      <td data-label="Pos">{standing.position}</td>
-                      <td data-label="Driver">{standing.driver}</td>
-                      <td data-label="Team">{standing.team}</td>
-                      <td data-label="Points">{standing.points}</td>
+            <>
+              {/* Desktop Table */}
+              <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-700 text-white">
+                    <tr>
+                      <th className="p-2 text-left">Pos</th>
+                      <th className="p-2 text-left">Name</th>
+                      <th className="p-2 text-left">Team</th>
+                      <th className="p-2 text-left">Points</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {standings.map((standing, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="p-2">{standing.position}</td>
+                        <td className="p-2">{standing.driver}</td>
+                        <td className="p-2">{standing.team}</td>
+                        <td className="p-2">{standing.points}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-2 mt-2">
+                {standings.map((standing, index) => renderMobileDriverCard(standing, index))}
+              </div>
+            </>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
