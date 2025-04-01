@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../styles.css';
 
 const ScrollButtons = () => {
   const [showButtons, setShowButtons] = useState(false);
@@ -55,11 +54,19 @@ const ScrollButtons = () => {
   }, [scrollTimeout]);
 
   return (
-    <div className={`scroll-buttons ${showButtons ? 'visible' : ''}`}>
-      <button onClick={scrollToTop} className="scroll-button top-button">
+    <div className={`fixed bottom-5 right-5 flex flex-col gap-2 transition-opacity ${
+      showButtons ? 'opacity-100 visible' : 'opacity-0 invisible'
+    }`}>
+      <button 
+        onClick={scrollToTop}
+        className="w-10 h-10 bg-blue-600 text-white rounded shadow-lg hover:bg-blue-700 flex items-center justify-center transition-colors"
+      >
         ↑
       </button>
-      <button onClick={scrollToBottom} className="scroll-button bottom-button">
+      <button 
+        onClick={scrollToBottom}
+        className="w-10 h-10 bg-blue-600 text-white rounded shadow-lg hover:bg-blue-700 flex items-center justify-center transition-colors"
+      >
         ↓
       </button>
     </div>

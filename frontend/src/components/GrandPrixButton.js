@@ -1,46 +1,50 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import GrandPrixDetails from './GrandPrixDetails';
 
 const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
-  const [selectedGrandPrix, setSelectedGrandPrix] = useState(null);
+  const [selectedGrandPrix, setSelectedGrandPrix] = React.useState(null);
 
-  // Handle component visibility and state cleanup
   const toggleDetails = () => {
     setActive(prev => !prev);
     setSelectedGrandPrix(null);
   };
 
-  // Show loading state if data isn't ready
   if (!grandsPrixData) {
     return (
-      <div className="grand-prix-button">
-        <button onClick={toggleDetails} className="toggle-button">
+      <div className="mb-6">
+        <button
+          onClick={toggleDetails}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors shadow-md"
+        >
           {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
         </button>
-        {isActive && <div className="loading">Loading Grand Prix data...</div>}
+        {isActive && <p className="mt-2 text-gray-600">Loading Grand Prix data...</p>}
       </div>
     );
   }
 
   return (
-    <div className="grand-prix-button">
-      <button onClick={toggleDetails} className="toggle-button">
+    <div className="mb-6">
+      <button
+        onClick={toggleDetails}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors shadow-md"
+      >
         {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
       </button>
 
       {isActive && (
-        <div className="gp-container">
+        <div className="mt-4 space-y-4">
           {!selectedGrandPrix ? (
             grandsPrixData.GrandsPrix?.length > 0 ? (
               grandsPrixData.GrandsPrix.map((gp) => (
-                <div key={`${gp.name}-${gp.round}`} className="gp-card">
-                  <h3>{gp.name}</h3>
-                  <div className="events-list">
+                <div key={`${gp.name}-${gp.round}`} className="bg-white rounded-xl shadow-md p-4">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{gp.name}</h3>
+                  <div className="space-y-2">
                     {gp.events?.map((event) => (
-                      <div key={`${gp.name}-${event.type}`} className="event-item">
-                        <span className="event-type">{event.type}</span>
-                        <span className="event-time">
+                      <div key={`${gp.name}-${event.type}`} className="flex justify-between text-sm">
+                        <span className="font-medium text-gray-700">{event.type}</span>
+                        <span className="text-gray-500">
                           {event.date} at {event.time}
                         </span>
                       </div>
@@ -48,14 +52,14 @@ const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
                   </div>
                   <button
                     onClick={() => setSelectedGrandPrix(gp)}
-                    className="details-button"
+                    className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
                   >
                     More Details →
                   </button>
                 </div>
               ))
             ) : (
-              <p className="no-data">No Grand Prix data available</p>
+              <p className="text-gray-500 italic">No Grand Prix data available</p>
             )
           ) : (
             <GrandPrixDetails
@@ -72,21 +76,7 @@ const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
 GrandPrixButton.propTypes = {
   isActive: PropTypes.bool.isRequired,
   setActive: PropTypes.func.isRequired,
-  grandsPrixData: PropTypes.shape({
-    GrandsPrix: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        events: PropTypes.arrayOf(
-          PropTypes.shape({
-            type: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
-            time: PropTypes.string.isRequired,
-            datetime: PropTypes.string.isRequired,
-          })
-        ).isRequired,
-      })
-    ).isRequired,
-  }),
+  grandsPrixData: PropTypes.object,
 };
 
 export default GrandPrixButton;

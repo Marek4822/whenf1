@@ -2,9 +2,9 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <header>
-      <h1>When F1</h1>
-    </header>
+    <header className="text-center mb-8">
+    <h1 className="text-4xl font-bold text-gray-900">When F1</h1>
+  </header>
   );
 };
 

@@ -1,16 +1,15 @@
 import React from 'react';
+import Timer from './Timer'
 
 const NextEvent = ({ nextEvent, timeLeft }) => {
   return (
-    <div className="card">
-      <h2>Next Event</h2>
-      <p>{nextEvent.type}</p>
-      <p>Grand Prix: {nextEvent.grandPrix}</p>
-      <p>Date: {nextEvent.date}</p>
-      <p>Time: {nextEvent.time}</p>
-      <p className="timer">
-        Time Left: {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
-      </p>
+    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+    <h2 className="text-2xl font-semibold mb-4">Next Event</h2>
+    <p className="text-gray-700">{nextEvent.type}</p>
+    <p className="text-gray-700 mb-2">Grand Prix: {nextEvent.grandPrix}</p>
+    <p className="text-gray-600">Date: {nextEvent.date}</p>
+    <p className="text-gray-600 mb-4">Time: {nextEvent.time}</p>
+    <Timer timeLeft={timeLeft} />
     </div>
   );
 };

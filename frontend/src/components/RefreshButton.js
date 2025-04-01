@@ -30,14 +30,21 @@ const RefreshButton = ({ onRefresh }) => {
   };
 
   return (
-    <div className="refresh-button">
+    <div className="mb-6">
       <button 
         onClick={handleRefresh}
         disabled={isLoading}
+        className="w-full bg-green-600 text-white p-3 rounded-xl font-medium hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
       >
         {isLoading ? 'Refreshing...' : 'Refresh Data'}
       </button>
-      {message && <div className="refresh-message">{message}</div>}
+      {message && (
+        <div className={`mt-2 text-sm ${
+          message.includes('Error') ? 'text-red-500' : 'text-green-600'
+        }`}>
+          {message}
+        </div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@ import GrandPrixButton from './components/GrandPrixButton';
 import ScrollButtons from './components/ScrollButtons';
 import RefreshButton from './components/RefreshButton';
 import { fetchGrandsPrix } from './api/api';
-import './styles.css';
+import './index.css';
 
 const App = () => {
   const [nextRace, setNextRace] = useState(null);
@@ -106,42 +106,41 @@ const App = () => {
   }, [nextEvent]);
 
   if (loading) {
-    return <div className="loading">Loading F1 data...</div>;
+    return <div className="p-4 text-center text-gray-600">Loading F1 data...</div>;
   }
 
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return <div className="p-4 text-center text-red-500">Error: {error}</div>;
   }
 
   return (
-    <div className="app">
-      <Header />
+    <div className="min-h-screen bg-gray-100 p-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <Header />
       {nextRace && (
         <NextRace nextRace={nextRace} timeLeft={raceTimeLeft} />
       )}
       {nextEvent && nextEvent.type !== "Grand Prix" && (
         <NextEvent nextEvent={nextEvent} timeLeft={eventTimeLeft} />
       )}
-      <div className="controls-container">
-      <RefreshButton onRefresh={() => {
-    // Add logic to refresh your data if needed
-    fetchGrandsPrix().then(setGrandsPrixData);
-  }} />
-        <DriverStandings
-          isActive={activeComponent === 'driver'}
-          setActive={() => setActiveComponent(prev => prev === 'driver' ? null : 'driver')}
-        />
-        <TeamStandings
-          isActive={activeComponent === 'team'}
-          setActive={() => setActiveComponent(prev => prev === 'team' ? null : 'team')}
-        />
-        <GrandPrixButton
-          isActive={activeComponent === 'grandPrix'}
-          setActive={() => setActiveComponent(prev => prev === 'grandPrix' ? null : 'grandPrix')}
-          grandsPrixData={grandsPrixData}
-        />
+          <div className="space-y-4 mt-6">
+          <RefreshButton onRefresh={() => fetchGrandsPrix().then(setGrandsPrixData)} />
+          <DriverStandings
+            isActive={activeComponent === 'driver'}
+            setActive={() => setActiveComponent(prev => prev === 'driver' ? null : 'driver')}
+          />
+          <TeamStandings
+            isActive={activeComponent === 'team'}
+            setActive={() => setActiveComponent(prev => prev === 'team' ? null : 'team')}
+          />
+          <GrandPrixButton
+            isActive={activeComponent === 'grandPrix'}
+            setActive={() => setActiveComponent(prev => prev === 'grandPrix' ? null : 'grandPrix')}
+            grandsPrixData={grandsPrixData}
+          />
+        </div>
+        <ScrollButtons />
       </div>
-      <ScrollButtons />
     </div>
   );
 };

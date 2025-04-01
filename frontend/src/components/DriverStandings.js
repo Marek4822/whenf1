@@ -26,24 +26,23 @@ const DriverStandings = ({ isActive, setActive }) => {
 
   return (
     <>
-    <div className="grand-prix-button">
-      <button onClick={toggleStandings} disabled={loading}>
+      <button onClick={toggleStandings} disabled={loading} className="w-full bg-blue-600 text-white p-3 rounded-xl font-medium hover:bg-blue-700 transition-colors">
         {loading ? 'Loading...' : isActive ? 'Hide Driver Standings' : 'Show Driver Standings'}
       </button>
-    </div>
       
       {isActive && (
-        <div className="content-container">
-          {error && <p className="error">{error}</p>}
+        <div className="mt-4">
+          {error && <p className="text-red-500 mb-2">{error}</p>}
           {standings.length > 0 && (
-            <div className="card">
-              <table>
-                <thead>
+            <div className="bg-white rounded-xl shadow-md overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-700 text-white">
                   <tr>
-                    <th>Pos</th>
-                    <th>Driver</th>
-                    <th>Team</th>
-                    <th>Points</th>
+                    <th className="p-3 text-left">Pos</th>
+                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Team</th>
+                    <th className="p-3 text-left">Points</th>
+
                   </tr>
                 </thead>
                 <tbody>
