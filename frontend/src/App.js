@@ -106,16 +106,16 @@ const App = () => {
   }, [nextEvent]);
 
   if (loading) {
-    return <div className="p-4 text-center text-gray-600">Loading F1 data...</div>;
+    return <div className="p-4 text-center text-f1-gray">Loading F1 data...</div>;
   }
 
   if (error) {
-    return <div className="p-4 text-center text-red-500">Error: {error}</div>;
+    return <div className="p-4 text-center text-red-400">Error: {error}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+    <div className="min-h-screen bg-f1-bg p-4">
+     <div className="max-w-4xl mx-auto bg-f1-card rounded-2xl shadow-f1-container p-6">
         <Header />
       {nextRace && (
         <NextRace nextRace={nextRace} timeLeft={raceTimeLeft} />

@@ -25,13 +25,13 @@ const TeamStandings = ({ isActive, setActive }) => {
   };
 
   const renderMobileTeamCard = (standing, index) => (
-    <div key={index} className="border rounded-lg p-3 mb-2 bg-white shadow-sm">
-      <div className="flex justify-between border-b pb-2 mb-2">
-        <span className="font-medium">#{standing.position}</span>
-        <span className="font-medium">{standing.team}</span>
+    <div key={index} className="border border-gray-800 rounded-lg p-3 mb-2 bg-f1-card shadow-sm">
+      <div className="flex justify-between border-b border-gray-800 pb-2 mb-2">
+        <span className="font-medium text-f1-text">#{standing.position}</span>
+        <span className="font-medium text-f1-text">{standing.team}</span>
       </div>
-      <div className="text-sm">
-        <span className="text-gray-500">Points:</span> {standing.points}
+      <div className="text-sm text-f1-text">
+        <span className="text-f1-gray">Points:</span> {standing.points}
       </div>
     </div>
   );
@@ -41,32 +41,32 @@ const TeamStandings = ({ isActive, setActive }) => {
       <button 
         onClick={toggleStandings} 
         disabled={loading}
-        className="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+        className="mt-3 w-full bg-f1-blue hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
       >
         {loading ? 'Loading...' : isActive ? 'Hide Team Standings' : 'Show Team Standings'}
       </button>
       
       {isActive && (
         <div className="mt-3">
-          {error && <p className="text-red-500 mb-2 text-sm">{error}</p>}
+          {error && <p className="text-red-400 mb-2 text-sm">{error}</p>}
           {standings.length > 0 && (
             <>
               {/* Desktop Table */}
-              <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="hidden md:block bg-f1-card rounded-lg shadow-sm overflow-hidden">
                 <table className="w-full text-sm">
-                  <thead className="bg-gray-700 text-white">
+                  <thead className="bg-f1-dark text-f1-text">
                     <tr>
                       <th className="p-2 text-left">Pos</th>
                       <th className="p-2 text-left">Team</th>
                       <th className="p-2 text-left">Points</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-gray-800">
                     {standings.map((standing, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="p-2">{standing.position}</td>
-                        <td className="p-2">{standing.team}</td>
-                        <td className="p-2">{standing.points}</td>
+                      <tr key={index} className="hover:bg-gray-800">
+                        <td className="p-2 text-f1-text">{standing.position}</td>
+                        <td className="p-2 text-f1-text">{standing.team}</td>
+                        <td className="p-2 text-f1-text">{standing.points}</td>
                       </tr>
                     ))}
                   </tbody>
