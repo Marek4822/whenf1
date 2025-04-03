@@ -10,12 +10,25 @@ const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
     setSelectedGrandPrix(null);
   };
 
+  // Function to check if Grand Prix is over
+  const isGrandPrixOver = (gp) => {
+    if (!gp.events || gp.events.length === 0) return false;
+    
+    // Find the race event (Grand Prix)
+    const raceEvent = gp.events.find(event => event.type === 'Grand Prix');
+    if (!raceEvent) return false;
+    
+    const raceDate = new Date(raceEvent.datetime);
+    const now = new Date();
+    return now > raceDate;
+  };
+
   if (!grandsPrixData) {
     return (
       <div className="mb-6">
         <button
           onClick={toggleDetails}
-          className="mt-3 w-full bg-f1-blue hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
+          className="w-full bg-f1-blue hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-colors shadow-md"
         >
           {isActive ? 'Hide Grand Prix Details' : 'Show Grand Prix Details'}
         </button>
@@ -37,27 +50,42 @@ const GrandPrixButton = ({ isActive, setActive, grandsPrixData }) => {
         <div className="mt-4 space-y-4">
           {!selectedGrandPrix ? (
             grandsPrixData.GrandsPrix?.length > 0 ? (
-              grandsPrixData.GrandsPrix.map((gp) => (
-                <div key={`${gp.name}-${gp.round}`} className="bg-f1-card rounded-xl shadow-f1-card p-4">
-                  <h3 className="text-xl font-semibold text-f1-text mb-2">{gp.name}</h3>
-                  <div className="space-y-2">
-                    {gp.events?.map((event) => (
-                      <div key={`${gp.name}-${event.type}`} className="flex justify-between text-sm">
-                        <span className="font-medium text-f1-text">{event.type}</span>
-                        <span className="text-f1-gray">
-                          {event.date} at {event.time}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setSelectedGrandPrix(gp)}
-                    className="mt-3 w-full bg-f1-blue hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
+              grandsPrixData.GrandsPrix.map((gp) => {
+                const gpOver = isGrandPrixOver(gp);
+                return (
+                  <div 
+                    key={`${gp.name}-${gp.round}`} 
+                    className={`rounded-xl shadow-md p-4 transition-all `}
                   >
-                    More Details →
-                  </button>
-                </div>
-              ))
+                    <h3 className={`text-xl font-semibold mb-2 ${gpOver ? 'text-f1-gray' : 'text-f1-text'}`}>
+                      {gp.name}
+                      {gpOver && <span className="ml-2 text-sm">(Completed)</span>}
+                    </h3>
+                    {!gpOver && (
+                      <div className="space-y-2">
+                        {gp.events?.map((event) => (
+                          <div key={`${gp.name}-${event.type}`} className="flex justify-between text-sm">
+                            <span className={`font-medium ${gpOver ? 'text-f1-gray' : 'text-f1-text'}`}>{event.type}</span>
+                            <span className={gpOver ? 'text-f1-gray' : 'text-f1-gray'}>
+                              {event.date} at {event.time}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <button
+                      onClick={() => setSelectedGrandPrix(gp)}
+                      className={`mt-3 w-full py-2 px-4 rounded-lg transition-colors ${
+                        gpOver 
+                          ? 'bg-gray-600 hover:bg-gray-700 text-f1-text' 
+                          : 'bg-f1-blue hover:bg-blue-600 text-white'
+                      }`}
+                    >
+                      More Details →
+                    </button>
+                  </div>
+                );
+              })
             ) : (
               <p className="text-f1-gray italic">No Grand Prix data available</p>
             )

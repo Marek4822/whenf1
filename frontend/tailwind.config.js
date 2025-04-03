@@ -8,7 +8,9 @@ module.exports = {
         'f1-gray': '#c2c2cf',
         'f1-bg': '#121212',
         'f1-card': '#1e1e1e',
-        'f1-text': '#f5f5f7'
+        'f1-text': '#f5f5f7',
+        'f1-next': '#232325'
+        
       },
       boxShadow: {
         'f1-card': '0 4px 12px rgba(0, 0, 0, 0.3)',
