@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import sqlite3
 import subprocess
+from waitress import serve
+
 
 app = Flask(__name__)
 CORS(app)  
@@ -166,4 +168,4 @@ def refresh_data():
         }), 500
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    serve(app, host="127.0.0.1")

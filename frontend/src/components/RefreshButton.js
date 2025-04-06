@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { API_BASE_URL } from './apiBase';
+
 
 const RefreshButton = ({ onRefresh }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +12,7 @@ const RefreshButton = ({ onRefresh }) => {
     setMessage('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/refresh-data', {
+      const response = await fetch(`${API_BASE_URL}/api/refresh-data`, {
         method: 'POST'
       });
       
