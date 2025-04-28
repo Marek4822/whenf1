@@ -168,4 +168,9 @@ def refresh_data():
         }), 500
 
 if __name__ == "__main__":
-    serve(app, host="127.0.0.1")
+    IP = ""
+    try:
+        print(f"Starting server on {IP}")
+        serve(app, host=IP, port=5000)
+    except Exception as e:
+        print(f"Failed to start server: {str(e)}")
